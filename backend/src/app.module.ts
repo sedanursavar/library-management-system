@@ -5,15 +5,13 @@ import { UsersModule } from './users/users.module';
 import { AuthorsModule } from './authors/authors.module';
 import { CategoriesModule } from './categories/categories.module';
 import { BooksModule } from './books/books.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    // Environment variables
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-
-    // TypeORM Database Connection
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -25,17 +23,14 @@ import { BooksModule } from './books/books.module';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true, // ⚠️ Sadece development için true
+        synchronize: true,
       }),
     }),
-
     UsersModule,
-
     AuthorsModule,
-
     CategoriesModule,
-
     BooksModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
