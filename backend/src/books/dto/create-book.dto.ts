@@ -1,31 +1,41 @@
-import { IsNotEmpty, IsOptional, IsNumber, IsArray, IsUrl } from 'class-validator';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsUrl,
+} from 'class-validator';
+import { Type } from 'class-transformer'; // 1. BU İMPORTU EKLE
 
 export class CreateBookDto {
-    @IsNotEmpty()
-    title: string;
+  @IsNotEmpty()
+  title: string;
 
-    @IsNotEmpty()
-    isbn: string;
+  @IsNotEmpty()
+  isbn: string;
 
-    @IsOptional()
-    description?: string;
+  @IsOptional()
+  description?: string;
 
-    @IsOptional()
-    @IsNumber()
-    publishedYear?: number;
+  @IsOptional()
+  @Type(() => Number) // 2. Yıl için dönüşüm ekle
+  @IsNumber()
+  publishedYear?: number;
 
-    @IsOptional()
-    @IsUrl()
-    coverImage?: string;
+  @IsOptional()
+  @IsUrl()
+  coverImage?: string;
 
-    @IsOptional()
-    @IsNumber()
-    totalCopies?: number;
+  @IsOptional()
+  @Type(() => Number) // 3. Kopya sayısı için dönüşüm ekle (Hatanın sebebi burası)
+  @IsNumber()
+  totalCopies?: number;
 
-    @IsNumber()
-    authorId: number;
+  @Type(() => Number) // 4. Yazar ID için dönüşüm ekle (Burası da hata verebilir)
+  @IsNumber()
+  authorId: number;
 
-    @IsArray()
-    @IsNumber({}, { each: true })
-    categoryIds: number[];
+  @IsArray()
+  @IsNumber({}, { each: true })
+  categoryIds: number[];
 }

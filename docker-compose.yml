@@ -1,15 +1,44 @@
+version: '3.8'
+
 services:
-  postgres:
+  # --- DATABASE ---
+  library_db:
     image: postgres:16-alpine
     container_name: library_db
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres123
-      POSTGRES_DB: library_db
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  # --- BACKEND (NestJS) ---
+  backend:
+    build: ./backend
+    container_name: library_backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - library_db
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=library_db
+      - DB_PORT=5432
+
+  # --- FRONTEND (Vite) ---
+  frontend:
+    build: ./frontend
+    container_name: library_frontend
+    ports:
+      - "5173:5173"  # Vite varsayılan portu
+    depends_on:
+      - backend
+    # Frontend tarayıcıda çalıştığı için API'ye localhost üzerinden erişir
+    environment:
+      - VITE_API_URL=http://localhost:3000
 
 volumes:
   postgres_data:

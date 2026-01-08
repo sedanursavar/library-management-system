@@ -1,36 +1,36 @@
 import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    CreateDateColumn,
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 export enum UserRole {
-    ADMIN = 'admin',
-    MEMBER = 'member',
+  ADMIN = 'admin',
+  MEMBER = 'member',
 }
 
 @Entity('users')
 export class User {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ unique: true })
-    email: string;
+  @Column({ unique: true })
+  email: string;
 
-    @Column()
-    password: string;
+  @Column()
+  password: string;
 
-    @Column()
-    name: string;
+  @Column()
+  name: string;
 
-    @Column({
-        type: 'enum',
-        enum: UserRole,
-        default: UserRole.MEMBER,
-    })
-    role: UserRole;
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.MEMBER,
+  })
+  role: UserRole;
 
-    @CreateDateColumn()
-    createdAt: Date;
+  @CreateDateColumn()
+  createdAt: Date;
 }

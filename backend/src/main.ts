@@ -12,15 +12,18 @@ async function bootstrap() {
   });
 
   // Global validation pipe
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,
-    transform: true,
-  }));
-
-  // API prefix
-  app.setGlobalPrefix('api');
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true, // DTO'da tanımlı olmayan fazlalık verileri siler
+      forbidNonWhitelisted: true, // Tanımsız veri gelirse hata atar
+      transform: true, // <--- İŞTE BU EKSİK! (String'leri Number'a çevirir)
+      transformOptions: {
+        enableImplicitConversion: true, // Tür dönüşümlerini otomatik yapmaya zorlar
+      },
+    }),
+  );
 
   await app.listen(3000);
-  console.log('🚀 Backend running on http://localhost:3000');
 }
+
 bootstrap();
